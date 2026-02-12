@@ -1,0 +1,83 @@
+Asked in my amazon sde-2 bar raiser lld round
+
+Bowling Alley LLD - Clear Flow
+
+
+1) Core Entities
+- Roll
+  - Stores one roll value: `pins_knocked` (0 to 10).
+  - Only roll-level validation.
+
+- Frame (abstract)
+  - Common behavior for all frame types.
+  - Holds rolls and helpers: `is_strike`, `is_spare`, `pins_knocked`.
+
+- NormalFrame (frames 1 to 9)
+  - Max 2 rolls.
+  - Strike ends frame immediately.
+  - Two-roll sum cannot exceed 10.
+
+- FinalFrame (frame 10)
+  - Normally 2 rolls.
+  - Third roll allowed only if spare/strike in first two rolls.
+  - Max 3 rolls with final-frame constraints.
+
+2) Player
+- Owns exactly 10 frames: 9 NormalFrame + 1 FinalFrame.
+- `roll(pins)`: sends roll to current incomplete frame.
+- Scoring rules (standard bowling):
+  - Open frame: frame pins only.
+  - Spare: 10 + next 1 roll.
+  - Strike: 10 + next 2 rolls.
+  - Final frame: sum of its own rolls only.
+- Exposes:
+  - `total_score()`
+  - `frame_scores()` (running totals)
+  - `is_game_complete()`
+
+3) Game (Single Lane Game)
+- Owns multiple players.
+- Tracks current player turn.
+- On each roll:
+  - apply roll to current player
+  - if current frame is now complete, move to next player
+  - else same player rolls again
+- Exposes:
+  - `scores()`
+  - `running_scores()`
+  - `winner()` (after game complete)
+
+  //Out of scope or include if interviewer ask for extensability of this game
+
+4) Lane
+- One lane can have at most one active game.
+- Can start a new game only when lane is free.
+- Routes rolls to its active game.
+
+5) BowlingAlleySystem
+- Manages multiple lanes in parallel.
+- Start game on specific lane or any free lane.
+- Route roll by lane id.
+- Check free lane ids.
+
+6) Runtime Flow
+- Create `BowlingAlleySystem(lane_count)`.
+- Start game(s) with players on lane(s).
+- For each turn, call `system.roll(lane_id, pins)`.
+- Game handles player turn switching automatically.
+- During game, read running scores from `game.running_scores()`.
+- At end, call `game.winner()`.
+
+7) Design Principles Used
+- SRP:
+  - Roll validates roll
+  - Frame validates frame constraints
+  - Player calculates score
+  - Game handles turn order
+  - Lane/System handle orchestration
+- KISS:
+  - Straightforward classes and methods.
+- YAGNI:
+  - No extra layers (DB/UI/events) added now.
+- Extensibility:
+  - Can add different scoring strategy or UI layer later without changing core flow.

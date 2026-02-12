@@ -1,0 +1,88 @@
+Important Exceptions for Interviews (Python LLD)
+
+Quick rule:
+- Built-in exceptions for generic validation/runtime mistakes.
+- Custom exceptions for domain/business rules.
+
+1. ValueError
+- Use when type is correct but value is invalid.
+- Bowling example: pins must be 0..10.
+- Mini snippet:
+  if pins < 0 or pins > 10:
+      raise ValueError("Pins must be between 0 and 10")
+
+2. TypeError
+- Use when input data type is wrong.
+- Example: pins passed as "10" (string).
+- Mini snippet:
+  if not isinstance(pins, int):
+      raise TypeError("Pins must be int")
+
+3. IndexError
+- Use when list/array index is out of bounds.
+- Example: accessing frame[10] when only 0..9 exist.
+- Mini snippet:
+  if frame_index >= len(frames):
+      raise IndexError("Frame index out of range")
+
+4. KeyError
+- Use when required dict key is missing.
+- Example: player id not present in scoreboard map.
+- Mini snippet:
+  if player_id not in players:
+      raise KeyError(f"Player {player_id} not found")
+
+5. RuntimeError
+- Use for invalid operation in current state (generic runtime issue).
+- Example: trying to roll after game has ended.
+- Mini snippet:
+  if game.is_over:
+      raise RuntimeError("Cannot roll: game already complete")
+
+6. NotImplementedError
+- Use in abstract/base class methods that must be overridden.
+- Mini snippet:
+  class Frame:
+      def add_roll(self, pins: int) -> None:
+          raise NotImplementedError("Subclasses must implement add_roll")
+
+7. AssertionError
+- Use for internal invariants (mainly debug/testing, not user input errors).
+- Example: score should never be negative.
+- Mini snippet:
+  assert score >= 0, "Score invariant violated"
+
+8. Custom domain exceptions (important for LLD interviews)
+- Use these for business-rule clarity.
+- Good names:
+  - GameOverError
+  - InvalidRollError
+  - FrameCompleteError
+  - InvalidStateTransitionError
+
+Example custom hierarchy:
+  class BowlingError(Exception):
+      pass
+
+  class InvalidRollError(BowlingError):
+      pass
+
+  class FrameCompleteError(BowlingError):
+      pass
+
+  class GameOverError(BowlingError):
+      pass
+
+Usage:
+  if frame.is_complete():
+      raise FrameCompleteError("Cannot add roll: frame is complete")
+
+Interview-ready mapping (say this quickly):
+- Validation issue -> ValueError / TypeError
+- Collection lookup issue -> IndexError / KeyError
+- Invalid state operation -> RuntimeError or domain-specific error
+- Domain rule violation -> custom exceptions
+
+Common mistake to avoid:
+- Do not raise plain Exception everywhere.
+- Pick specific exceptions so callers can handle failures cleanly.
