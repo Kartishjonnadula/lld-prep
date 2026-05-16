@@ -1,0 +1,31 @@
+Code Review Interview Prep
+
+How we will practice (one sample at a time)
+1. You review the sample like an interviewer would.
+2. You send findings with severity and line references.
+3. I grade your review (coverage, correctness, communication).
+4. I share a model review and improvement tips.
+5. Then we move to the next sample.
+
+Review format to use
+- Severity: P0 (critical), P1 (high), P2 (medium), P3 (low)
+- Template:
+  - [Severity] file:line - issue
+  - Why it matters
+  - Suggested fix
+
+Sample 1: Checkout Flow (Python)
+- File: `samples/sample1_checkout.py`
+- Goal: Find bugs, edge-case misses, code smells, SOLID/design issues, and test gaps.
+- Timebox: 15-20 minutes
+- Deliverable: At least 8 findings with severity.
+
+Hints for this sample
+- Think about money handling, order consistency, validation, and failure handling.
+- Check if business operations happen in a safe order.
+- Watch for security/privacy issues in logs/audit.
+
+When you finish Sample 1, paste your review notes below this line:
+
+Design pattern revision:
+- Open `design_patterns_templates.md` for all 23 GoF pattern templates in Python.

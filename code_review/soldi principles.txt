@@ -1,0 +1,82 @@
+1. What’s the code trying to do?
+2. Is the logic correct and is it handling every cases(edge cases)
+3. Is the code maintainable
+4. Is it testable?
+
+
+
+SOLID Principles
+
+Single responsibility  principle (SRP)
+	one class one responsibility 
+
+
+    
+Open/Closed principle
+	open for extension closed for modification 
+bad example
+def calculate_discount(user_type):
+    if user_type == "premium":
+    elif user_type == "regular":
+
+    its bad because if new user came in future we need to edit calculate_discount again
+
+good example
+
+    class User(ABC):
+    @abstractmethod
+    class calculate_discount(self):
+        pass
+    class PremiumUser(User):
+        def calculate_discount(self):
+            return 0.2
+    class RegularUser(User):
+        def calculate_discount(self):
+            return 0.1
+
+    
+
+Liskov substitution
+	child class should not break parent behaviour   
+    whenever we implement implement classes such that when we pass child to parent it will able to implement every function from parent
+
+
+
+Interface Segregation
+	don’t put too many functions inside a single interface which doesn’t make sense for every child object , divide them that make sense into different classes
+
+    bad example
+    class Animal:
+        def fly()
+        def swim()
+    fish shouldnt implement fly(doesnt make sense and we bloat the interface with multiple methods)
+    
+    great example
+    class FlyBehavior:
+        def fly(self):
+            print("Flying")
+
+    class SwimBehavior:
+        def swim(self):
+            print("Swimming")
+
+    class Animal:
+        def __init__(self, behavior):
+            self.behavior = behavior
+
+
+Dependency Inversion:
+	Hight level modules shouldn’t depend on classes
+	so don’t force create classes inside another classes, lets take an abstract parameter for that object we creating
+
+	Ex: 
+    bad example
+    class Order:
+        def __init__(self):
+            self.db = MySQLDatabase() //dependecy
+    good example:
+    class Order:
+        def __init__(self, db):
+            self.db = db
+
+
