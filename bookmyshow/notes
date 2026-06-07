@@ -1,0 +1,30 @@
+Requirements:
+Users can browse movies
+Users can browse theaters
+Users can see available seats for a show
+Users can select multiple seats
+Seat locking,When user selects seats,they should become temporarily unavailable.
+Payment
+Booking confirmation
+Cancellation, release seats
+
+
+Non functional Requirements
+No double booking ****
+Fast seat availability lookup
+Atomic booking, either all selected booked or none ,never partial
+Extensible code
+
+
+
+Entities
+
+Ticket
+Seat
+Show 
+Theater 
+Movie 
+
+BookingApp->Facade layer for application
+    dictionary of {movies,theaters} and {theaters,movies}
+
